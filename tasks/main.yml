@@ -2,22 +2,21 @@
 # Tasks to install and configuure redis for Wordpress
 # OLD Source: https://www.digitalocean.com/community/tutorials/how-to-configure-redis-caching-to-speed-up-wordpress-on-ubuntu-14-04
 # NEW Source: https://www.justinsilver.com/technology/linux/lemp-centos-7-nginx-php7-redis-wordpress/
+# TODO:
+# 1.) This but for CentOS: https://easyengine.io/tutorials/php/redis-php-sessions/
 
 - name: Install redis
   yum:
     name: redis
     state: latest
 
-#- name: Copy object-cache.php for Wordpress
-#  template:
-#    src: object-cache.php
-#    dest: /srv/wordpress/wp-content/
+- name: Copy redis.conf for Redis
+  template:
+    src: redis.conf
+    dest: /etc/
 
-#- name: Copy redis.conf for Redis
-#  template:
-#    src: redis.conf
-#    dest: /etc/
-
+# SEE TODO
+# Now in /etc/opt/remi/php71/php.d/50-redis.ini ???
 #- name: Enable redis php extension
 #  lineinfile:
 #    path: /etc/php-zts.d/redis.ini

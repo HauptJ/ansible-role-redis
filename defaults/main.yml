@@ -1,1 +1,7 @@
 # Default variable settings
+
+# Redis Cache setting
+# See redis.config
+
+rd_mem: 512mb
+rd_mem_pol: allkeys-lru
