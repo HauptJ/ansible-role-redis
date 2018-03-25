@@ -2,27 +2,21 @@
 # Tasks to install and configuure redis for Wordpress
 # OLD Source: https://www.digitalocean.com/community/tutorials/how-to-configure-redis-caching-to-speed-up-wordpress-on-ubuntu-14-04
 # NEW Source: https://www.justinsilver.com/technology/linux/lemp-centos-7-nginx-php7-redis-wordpress/
+# NEW Source2: https://easyengine.io/wordpress-nginx/tutorials/single-site/redis_cache-with-conditional-purging/
+# and https://easyengine.io/tutorials/php/redis-php-sessions/
 # TODO:
-# 1.) This but for CentOS: https://easyengine.io/tutorials/php/redis-php-sessions/
+# 1.) NEEDS TESTING - This but for CentOS: https://easyengine.io/tutorials/php/redis-php-sessions/
 
 - name: Install redis
   yum:
     name: redis
     state: latest
 
-- name: Copy redis.conf for Redis
-  template:
-    src: redis.conf
-    dest: /etc/
-
-# SEE TODO
-# Now in /etc/opt/remi/php71/php.d/50-redis.ini ???
-#- name: Enable redis php extension
-#  lineinfile:
-#    path: /etc/php-zts.d/redis.ini
-#    regexp: '^extension='
-#    line: 'extension=redis.so'
-#  notify: Restart redis
+# Still necessary???
+#- name: Copy redis.conf for Redis
+#  template:
+#    src: redis.conf
+#    dest: /etc/
 
 - name: fix redis background saves on low memory
   block:
@@ -65,9 +59,13 @@
   service:
     name: redis
     enabled: yes
+    state: restarted
+  ignore_errors: yes
 
-- name: start or restart redis
-  shell: (service redis status > /dev/null && service redis restart) || service redis start
+#- name: start or restart redis
+#  shell: (service redis status > /dev/null && service redis restart) || service redis start
+
+# Why disable hugepage tables: https://docs.mongodb.com/manual/tutorial/transparent-huge-pages/
 
 - name: Copy disable-transparent-hugepages
   copy:
@@ -87,14 +85,17 @@
 
 - name: Configure Tuned, CentOS 7
   block:
-    - file:
+    - name: create /etc/tuned/no-thp
+      file:
         path: /etc/tuned/no-thp
         state: directory
 
-    - copy:
+    - name: copy tuned.conf
+      copy:
         src: tuned.conf
         dest: /etc/tuned/no-thp/tuned.conf
 
+    - name: set tuned-adm profile to no-thp
     - command: tuned-adm profile no-thp
       args:
         chdir: /etc/tuned/no-thp/

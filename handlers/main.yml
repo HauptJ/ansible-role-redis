@@ -4,7 +4,5 @@
 - name: Restart redis
   service:
     name: redis
+    enabled: yes
     state: restarted
-  notify:
-    - restart nginx
-    - restart php-fpm
