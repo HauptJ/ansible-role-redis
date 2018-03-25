@@ -96,7 +96,7 @@
         dest: /etc/tuned/no-thp/tuned.conf
 
     - name: set tuned-adm profile to no-thp
-    - command: tuned-adm profile no-thp
+      command: tuned-adm profile no-thp
       args:
         chdir: /etc/tuned/no-thp/
         #creates: ???
