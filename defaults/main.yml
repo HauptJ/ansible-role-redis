@@ -5,3 +5,6 @@
 
 rd_mem: 512mb
 rd_mem_pol: allkeys-lru
+
+# Optimize system for Redis
+rd_optimize: false
