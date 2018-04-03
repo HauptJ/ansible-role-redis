@@ -3,7 +3,7 @@
 # @Email:  josh@hauptj.com
 # @Filename: main.yml
 # @Last modified by:   HauptJ
-# @Last modified time: 02-Apr-2018
+# @Last modified time: 03-Apr-2018
 
 ---
 # Tasks to install and configuure redis for Wordpress
@@ -19,10 +19,11 @@
     name: redis
     state: latest
 
-- name: Copy redis.conf for Redis
-  template:
-    src: redis.conf
-    dest: /etc/
+# NOTE: Broken???
+#- name: Copy redis.conf for Redis
+#  template:
+#    dest: /etc/
+#    src: redis.conf
 
 - name: enable redis service on reboot
   service:
