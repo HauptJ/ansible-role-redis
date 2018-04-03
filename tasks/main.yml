@@ -1,3 +1,10 @@
+# @Author: Haupt Joshua <HauptJ>
+# @Date:   26-Mar-2018
+# @Email:  josh@hauptj.com
+# @Filename: main.yml
+# @Last modified by:   HauptJ
+# @Last modified time: 02-Apr-2018
+
 ---
 # Tasks to install and configuure redis for Wordpress
 # OLD Source: https://www.digitalocean.com/community/tutorials/how-to-configure-redis-caching-to-speed-up-wordpress-on-ubuntu-14-04
@@ -12,11 +19,10 @@
     name: redis
     state: latest
 
-# Still necessary???
-#- name: Copy redis.conf for Redis
-#  template:
-#    src: redis.conf
-#    dest: /etc/
+- name: Copy redis.conf for Redis
+  template:
+    src: redis.conf
+    dest: /etc/
 
 - name: enable redis service on reboot
   service:

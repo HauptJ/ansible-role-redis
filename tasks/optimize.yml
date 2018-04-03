@@ -1,3 +1,10 @@
+# @Author: Haupt Joshua <HauptJ>
+# @Date:   26-Mar-2018
+# @Email:  josh@hauptj.com
+# @Filename: optimize.yml
+# @Last modified by:   HauptJ
+# @Last modified time: 02-Apr-2018
+
 ---
   # Tasks to optimize the system for Redis
   # Source: https://www.justinsilver.com/technology/linux/lemp-centos-7-nginx-php7-redis-wordpress/
@@ -69,7 +76,7 @@
         src: tuned.conf
         dest: /etc/tuned/no-thp/tuned.conf
 
-    # broken
+    # NOTE: broken
     - name: set tuned-adm profile to no-thp
       command: tuned-adm profile no-thp
       args:

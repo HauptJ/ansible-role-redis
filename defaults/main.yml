@@ -1,3 +1,10 @@
+# @Author: Haupt Joshua <HauptJ>
+# @Date:   26-Mar-2018
+# @Email:  josh@hauptj.com
+# @Filename: main.yml
+# @Last modified by:   HauptJ
+# @Last modified time: 02-Apr-2018
+
 # Default variable settings
 
 # Redis Cache setting
@@ -7,4 +14,5 @@ rd_mem: 512mb
 rd_mem_pol: allkeys-lru
 
 # Optimize system for Redis
+# NOTE: BROKEN
 rd_optimize: false
