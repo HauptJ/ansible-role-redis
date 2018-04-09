@@ -1,0 +1,85 @@
+# @Author: Haupt Joshua <HauptJ>
+# @Date:   26-Mar-2018
+# @Email:  josh@hauptj.com
+# @Filename: optimize.yml
+# @Last modified by:   HauptJ
+# @Last modified time: 02-Apr-2018
+
+---
+  # Tasks to optimize the system for Redis
+  # Source: https://www.justinsilver.com/technology/linux/lemp-centos-7-nginx-php7-redis-wordpress/
+
+- name: fix redis background saves on low memory
+  block:
+    - name: sysctl vm.overcommit_memory=1
+      command: sysctl vm.overcommit_memory=1
+
+    - name: create 88-vm.overcommit_memory.conf and set vm.overcommit_memory = 1
+      lineinfile:
+        path: /etc/sysctl.d/88-vm.overcommit_memory.conf
+        regexp: '^vm.overcommit_memory ='
+        line: 'vm.overcommit_memory = 1'
+        create: yes
+
+- name: increase max connections
+  block:
+    - name: sysctl -w net.core.somaxconn=65535
+      command: sysctl -w net.core.somaxconn=65535
+
+    - name: create 88-net.core.somaxconn.conf and set net.core.somaxconn = 65535
+      lineinfile:
+        path: /etc/sysctl.d/88-net.core.somaxconn.conf
+        regexp: '^net.core.somaxconn ='
+        line: 'net.core.somaxconn = 65535'
+        create: yes
+
+    - name: sysctl -w fs.file-max=100000
+      command: sysctl -w fs.file-max=100000
+
+    - name: create 88-fs.file-max.conf and set fs.file-max = 100000
+      lineinfile:
+        path: /etc/sysctl.d/88-fs.file-max.conf
+        regexp: '^fs.file-max ='
+        line: 'fs.file-max = 100000'
+        create: yes
+
+    - name: set tcp-backlog 65535
+      command: sed -i "s|^tcp-backlog [[:digit:]]\+|tcp-backlog 65535|" /etc/redis.conf
+
+# Why disable hugepage tables: https://docs.mongodb.com/manual/tutorial/transparent-huge-pages/
+
+- name: Copy disable-transparent-hugepages
+  copy:
+    src: disable-transparent-hugepages
+    dest: /etc/init.d/disable-transparent-hugepages
+
+- name: Set permissions for disable-transparent-hugepages
+  file:
+    path: /etc/init.d/disable-transparent-hugepages
+    mode: 755
+
+- name: execute disable-transparent-hugepages
+  shell: chkconfig --add disable-transparent-hugepages
+  args:
+    chdir: /etc/init.d/
+    #creates: ??? or
+
+- name: Configure Tuned, CentOS 7
+  block:
+    - name: create /etc/tuned/no-thp
+      file:
+        path: /etc/tuned/no-thp
+        state: directory
+
+    - name: copy tuned.conf
+      copy:
+        src: tuned.conf
+        dest: /etc/tuned/no-thp/tuned.conf
+
+    # NOTE: broken
+    - name: set tuned-adm profile to no-thp
+      command: tuned-adm profile no-thp
+      args:
+        chdir: /etc/tuned/no-thp/
+        #creates: ???
+      ignore_errors: true
