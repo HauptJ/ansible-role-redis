@@ -22,5 +22,5 @@ galaxy_info:
     - openresty
     - wordpress
 dependencies:
-  - { role: geerlingguy.repo-epel }
-  - { role: geerlingguy.repo-remi }
+  - role: geerlingguy.repo-epel
+  - role: geerlingguy.repo-remi
