@@ -16,3 +16,6 @@ rd_mem_pol: allkeys-lru
 # Optimize system for Redis
 # NOTE: BROKEN
 rd_optimize: false
+
+# CI testing, this should only be set to true for testing
+rd_ci_test: true
