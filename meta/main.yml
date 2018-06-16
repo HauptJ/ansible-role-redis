@@ -21,8 +21,3 @@ galaxy_info:
     - nginx
     - openresty
     - wordpress
-dependencies:
-  - role: geerlingguy.repo-epel
-    when: rd_ci_test == true
-  - role: geerlingguy.repo-remi
-    when: rd_ci_test == true
